@@ -22,15 +22,14 @@ const connectionRequestSchema = new mongoose.Schema(
   }
 );
 
+connectionRequestSchema.index({
+  fromUserId: 1,
+  toUserId: 1,
+});
+
 const ConnectionRequestModel = new mongoose.model(
   "Connection request",
   connectionRequestSchema
 );
 
 module.exports = ConnectionRequestModel;
-
-
-
-
-
-
