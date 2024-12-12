@@ -29,7 +29,7 @@ requestRouter.post(
 
     const toUser = await User.findById(toUserId);
     if (!toUser) return res.send("User does not exists");
- 
+
     const existingRequest = await ConnectionRequest.findOne({
       $or: [
         { fromUserId, toUserId },
@@ -48,6 +48,41 @@ requestRouter.post(
     res.json({
       message: "Request Sent",
     });
+  }
+);
+
+requestRouter.post(
+  "/request/review/:status/:requestId",
+
+  userAuth,
+
+  async (req, res) => {
+    try {
+      const allowedStatus = ["accepted", "rejected"];
+
+      const { status, requestId } = req.params;
+
+      const isValidStatus = allowedStatus.includes(status);
+
+      if (!isValidStatus) return res.send("Invalid Status");
+
+      const connectionRequest = await ConnectionRequest.findOne({
+        _id: requestId,
+        toUserId: req.user._id,
+        status: "interested",
+      });
+
+      if (!connectionRequest) return res.send("Request not found");
+
+      connectionRequest.status = status;
+      const data = await connectionRequest.save();
+      res.json({
+        message: "Connection request " + status,
+        data,
+      });
+    } catch (err) {
+      res.send(err.message);
+    }
   }
 );
 
