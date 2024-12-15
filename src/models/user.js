@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      
+
       minLength: 2,
     },
     lastName: {
@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema(
     },
     skills: {
       type: [String],
+    },
+    photoUrl: {
+      type: String,
+      default: "https://geographyandyou.com/images/user-profile.png",
     },
   },
   {

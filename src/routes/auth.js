@@ -41,7 +41,7 @@ authRouter.post("/login", async (req, res) => {
 
       res.cookie("token", token);
 
-      res.send("Login Successfull");
+      res.send(user);
     } else throw new Error("Invalid Creditential");
   } catch (err) {
     res.send(err.message);
