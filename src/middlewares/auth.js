@@ -9,8 +9,8 @@ const userAuth = async (req, res, next) => {
     "/refund-policy",
     "/shipping-policy",
     "/contact-us",
-    "/login",  // Allow login page without authentication
-    "/signup"  // Allow signup page without authentication
+    "/login", // Allow login page without authentication
+    "/signup", // Allow signup page without authentication
   ];
 
   // If the request path is public, skip the authentication
