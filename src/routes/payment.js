@@ -7,7 +7,7 @@ const { membershipAmount } = require("../utils/constants");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
-const user = require("../models/user");
+const User = require("../models/user");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
@@ -79,7 +79,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     await payment.save();
     console.log("Payment saved");
 
-    const user = await user.findOne({ _id: payment.userId });
+    const user = await User.findOne({ _id: payment.userId });
     user.isPremium = true;
     user.membershipType = payment.notes.membershipType;
     console.log("User saved");
