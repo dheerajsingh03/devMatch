@@ -3,11 +3,11 @@ const { userAuth } = require("../middlewares/auth");
 const paymentRouter = express.Router();
 const razorpayInstance = require("../utils/razorpay");
 const Payment = require("../models/payment");
+const User = require("../models/user");
 const { membershipAmount } = require("../utils/constants");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
-const User = require("../models/user");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
@@ -29,8 +29,6 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
     // Save it in my database
     console.log(order);
 
-
-
     const payment = new Payment({
       userId: req.user._id,
       orderId: order.id,
@@ -41,13 +39,10 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
       notes: order.notes,
     });
 
+    const savedPayment = await payment.save();
 
-
-    const savedPayment=await payment.save();
-
-
-
-    return res.json({...savedPayment.toJSON(),keyId:process.env.RAZORPAY_KEY_ID});
+    // Return back my order details to frontend
+    res.json({ ...savedPayment.toJSON(), keyId: process.env.RAZORPAY_KEY_ID });
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }
@@ -86,6 +81,14 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
     await user.save();
 
+    // Update the user as premium
+
+    // if (req.body.event == "payment.captured") {
+    // }
+    // if (req.body.event == "payment.failed") {
+    // }
+
+    // return success response to razorpay
 
     return res.status(200).json({ msg: "Webhook received successfully" });
   } catch (err) {
@@ -93,5 +96,13 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
   }
 });
 
+paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
+  const user = req.user.toJSON();
+  console.log(user);
+  if (user.isPremium) {
+    return res.json({ ...user });
+  }
+  return res.json({ ...user });
+});
 
 module.exports = paymentRouter;
