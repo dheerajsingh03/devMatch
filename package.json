@@ -1,5 +1,5 @@
 {
-  "name": "devtinder",
+  "name": "devmatch",
   "version": "1.0.0",
   "description": "tinder for devs",
   "main": "index.js",
@@ -27,6 +27,7 @@
     "node": "^18.20.7",
     "node-cron": "^3.0.3",
     "razorpay": "^2.9.6",
+    "socket.io": "^4.8.1",
     "validator": "^13.12.0"
   }
 }
