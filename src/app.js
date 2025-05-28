@@ -1,5 +1,4 @@
 const express = require("express");
-const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -37,7 +36,7 @@ app.use("/", chatRouter);
 const server = http.createServer(app);
 initializeSocket(server);
 
-connectDB()
+connectDb()
   .then(() => {
     console.log("Database connection established...");
     server.listen(7777, () => {
